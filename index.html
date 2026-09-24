@@ -184,6 +184,9 @@ h2{font-size:clamp(1.9rem,5vw,2.7rem)}
 [dir=ltr] .hero h1,[dir=ltr] .hero .sub{animation-name:riseL}
 @keyframes riseL{from{opacity:0;transform:translateX(-30px)}}
 @media(max-width:400px){.bar{gap:.4rem}.brand{font-size:.95rem}.lang{min-width:44px;padding:.3rem .5rem}}
+.hero .wrap{grid-template-columns:1fr}
+.hero .wrap>div{max-width:820px;margin-inline:auto;text-align:center}
+.hero .cta{justify-content:center}
 </style>
 </head>
 <body>
@@ -219,7 +222,6 @@ h2{font-size:clamp(1.9rem,5vw,2.7rem)}
     <a class="btn btn-line btn-lg" href="#story">تعرّف على قصتنا</a>
    </div>
   </div>
-  <div class="frame" id="hero"><div>هنا تُوضع صورة العائلة<br><small>يمكن تغييرها من «إدارة الصور» أسفل الصفحة</small></div></div>
  </div>
 </section>
 
@@ -262,7 +264,6 @@ h2{font-size:clamp(1.9rem,5vw,2.7rem)}
   <p class="note">أسماء الصور: قبل الحرب من gas10.jpg إلى gas13.jpg، وبعد الحرب من gas20.jpg إلى gas25.jpg. اضغط «رفع» تحت أي مربع، أو ارفع عدة صور معًا وستُوزَّع حسب اسم الملف.</p>
   <div class="acts">
    <label class="btn btn-line">رفع عدة صور دفعة واحدة<input type="file" id="bulk" accept="image/*" multiple></label>
-   <button class="btn btn-line" id="heroUp">تغيير صورة الغلاف</button>
   </div>
   <input type="file" id="one" accept="image/*" hidden>
  </div>
@@ -326,12 +327,12 @@ const STORY=[
  ["الحياة قبل الحرب","كنا نعيش في بيتنا حياة هادئة ومستقرة، وكان لنا فيه مكان آمن نعود إليه كل يوم.",0,"Life before the war","We lived a calm, settled life in our home, with a safe place to come back to every day."],
  ["بداية الحرب","مع بداية الحرب اضطررنا إلى إخلاء منزلنا والنزوح إلى مدينة رفح. تنقلنا هناك من مكان إلى آخر وعشنا مشرّدين في الخيام، وانقطع عنا الغذاء.",0,"When the war began","When the war began we had to evacuate our home and flee to the city of Rafah. There we moved from place to place, living displaced in tents, and we were cut off from food."],
  ["ما تغيّر في حياتنا","تدمّر منزلنا، وأصبحت حياتنا صعبة جدًا.",0,"What changed in our lives","Our home was destroyed, and our life became very hard."],
- ["النزوح","هنا يمكن إضافة تفاصيل النزوح وما حدث للعائلة...",1,"Displacement","Details about the displacement and what happened to the family can be added here..."],
+ ["النزوح","خلال فترة الحرب نزحنا من خيمة إلى أخرى، وعانينا من نقص الطعام والكهرباء والمياه.",0,"Displacement","Throughout the war we were displaced from one tent to another, and we suffered from a lack of food, electricity and water."],
  ["الحياة في الخيمة","نعيش اليوم، أنا وأسرتي المكونة من 9 أفراد، في خيمة في الشارع. هنا يمكن إضافة تفاصيل الظروف الحالية...",0,"Life in the tent","Today my family of 9 and I live in a tent on the street. Details about our current conditions can be added here..."],
  ["احتياجاتنا اليوم","نحتاج إلى مساعدة إنسانية عاجلة لتوفير الاحتياجات الضرورية لعائلتنا. هنا يمكن كتابة قائمة الاحتياجات بالتفصيل...",0,"Our needs today","We urgently need humanitarian help to provide what our family needs. A detailed list of needs can be written here..."],
  ["أملنا","نأمل أن نجد من يقف معنا لنؤمّن احتياجاتنا الأساسية ونعيش بكرامة.",0,"Our hope","We hope to find people who will stand with us so we can meet our basic needs and live with dignity."]
 ];
-/* صور مدمجة تظهر للجميع: {slot:"gas10", src:"data:image/jpeg;base64,..."} — والغلاف slot:"hero" */
+/* صور مدمجة تظهر للجميع: {slot:"gas10", src:"data:image/jpeg;base64,..."} — وصورة العائلة slot:"gas5" */
 const PHOTOS=[];
 /* ================================= */
 const CATS={before:"قبل الحرب",after:"بعد الحرب"};
@@ -345,7 +346,7 @@ const EN={
 "عائلة من غزة":"A Family from Gaza","الرئيسية":"Home","قصتنا":"Our Story","حياتنا الآن":"Our Life Now","قبل وبعد":"Before & After","كيف يمكنك المساعدة":"How You Can Help","تواصل معنا":"Contact us",
 "نعيش في خيمة وسط ظروف إنسانية صعبة في قطاع غزة":"We live in a tent amid harsh humanitarian conditions in the Gaza Strip",
 "أنا وأسرتي المكونة من 9 أفراد نعيش حاليًا في خيمة في الشارع، وسط ظروف قاسية ونقص في الاحتياجات الأساسية. نحتاج إلى مساعدة عاجلة لتوفير الاحتياجات الضرورية لعائلتنا ومساعدتنا على تجاوز هذه الظروف الصعبة.":"My family of 9 and I currently live in a tent on the street, in harsh conditions and without basic necessities. We urgently need help to provide what our family needs and to get through this difficult time.",
-"أريد المساعدة":"I need help","تعرّف على قصتنا":"Read our story","هنا تُوضع صورة العائلة":"The family photo goes here","يمكن تغييرها من «إدارة الصور» أسفل الصفحة":"You can change it from “Manage photos” at the bottom of the page",
+"أريد المساعدة":"I need help","تعرّف على قصتنا":"Read our story","هنا تُوضع صورة العائلة":"The family photo goes here","اسم الملف: gas5.jpg":"File name: gas5.jpg",
 "نعرض وضعنا كما هو، بلا مبالغة، ليعرف من يريد مساعدتنا ما الذي نحتاجه فعلًا.":"We show our situation as it is, without exaggeration, so anyone who wants to help knows what we actually need.",
 "عدد أفراد الأسرة":"Family members","9 أفراد":"9 people","مكان الإقامة":"Where we live","خيمة في الشارع":"A tent on the street","الحاجة":"What we need","مساعدة إنسانية عاجلة":"Urgent humanitarian aid","الظروف الحالية":"Current conditions","ظروف معيشية قاسية ونقص في الاحتياجات الأساسية":"Harsh living conditions and a shortage of basic necessities",
 "لم نكتب هنا إلا ما هو مؤكد. الفقرات المنقطة تنتظر التفاصيل التي ستضيفها العائلة بكلماتها.":"We only wrote what is certain. The dashed paragraphs are waiting for details the family will add in their own words.",
@@ -412,8 +413,6 @@ function tile(slot,cat){
 function render(){
  $("#g-before").replaceChildren(...BEFORE.map(k=>tile(k,"before")));
  $("#g-after").replaceChildren(...AFTER.map(k=>tile(k,"after")));
- const hs=mine.hero||(PHOTOS.find(p=>p.slot==="hero")||{}).src,f=$("#hero");
- if(hs){f.replaceChildren(h("img",{src:hs,alt:t("صورة العائلة")}));f.classList.add("has")}
 }
 
 /* lightbox */
@@ -431,12 +430,11 @@ let x0;lb.ontouchstart=e=>x0=e.touches[0].clientX;lb.ontouchend=e=>{const d=e.ch
 /* upload (square crop, 1:1) */
 let target;
 async function shrink(f,sq){try{const b=await createImageBitmap(f);let sx=0,sy=0,w=b.width,q=b.height;if(sq){const m=Math.min(w,q);sx=(w-m)/2;sy=(q-m)/2;w=q=m}const k=Math.min(1,1600/Math.max(w,q));const c=document.createElement("canvas");c.width=Math.round(w*k);c.height=Math.round(q*k);c.getContext("2d").drawImage(b,sx,sy,w,q,0,0,c.width,c.height);return await new Promise(r=>c.toBlob(r,"image/jpeg",.85))}catch(e){return f}}
-async function put(slot,f){const blob=await shrink(f,slot!=="hero");await tx("readwrite",s=>s.put({slot,blob}))}
+async function put(slot,f){const blob=await shrink(f,slot!=="gas5");await tx("readwrite",s=>s.put({slot,blob}))}
 const pick=k=>{target=k;$("#one").click()};
 async function rm(k){try{await tx("readwrite",s=>s.delete(k));await load()}catch(e){toast(t("تعذّر الحذف"))}}
 $("#one").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{await put(target,f);await load();toast(t("تم حفظ الصورة على هذا الجهاز"))}catch(x){toast(t("تعذّر الحفظ على هذا المتصفح"))}};
 $("#bulk").onchange=async e=>{const fs=[...e.target.files];e.target.value="";let n=0,bad=0;try{for(const f of fs){const m=f.name.match(/gas(\d+)/i),k=m&&"gas"+m[1];if(k&&(BEFORE.includes(k)||AFTER.includes(k))){await put(k,f);n++}else bad++}await load();toast(n+" ✓"+(bad?" — "+bad+" "+t("ملفات لم يُتعرّف على اسمها"):""))}catch(x){toast(t("تعذّر الحفظ على هذا المتصفح"))}};
-$("#heroUp").onclick=()=>pick("hero");
 const ad=$("#admin");
 function admin(on){ad.hidden=!on;document.body.classList.toggle("adm",on)}
 $("#adm").onclick=()=>{admin(ad.hidden);if(!ad.hidden)ad.scrollIntoView({behavior:"smooth"})};
